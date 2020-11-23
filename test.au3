@@ -4,7 +4,7 @@
 
 #include "GLFW3.au3"
 
-_glfwStartup(@ScriptDir & "\lib\glfw3_x86.dll")
+_glfwStartup(@ScriptDir & "\lib\glfw3_" & ((@AutoItX64) ? "x64" : "x86") & ".dll")
 If @error Then
     ConsoleWrite(StringFormat("[_glfwStartup] @error: %d, @extended: %d", @error, @extended) & @CRLF)
     Exit
@@ -45,6 +45,33 @@ Else
 EndIf
 TestEnd()
 #EndRegion Test: _glfwGetVersionString
+
+
+#Region Test: _glfwGetError
+Test("_glfwGetError")
+Local $sError = ""
+Local $iError = _glfwGetError($sError)
+ConsoleWrite(StringFormat( _
+	"[_glfwGetError] Errorcode: %d, Description: %s", _
+	$iError, _
+	$sError _
+) & @CRLF)
+TestEnd()
+#EndRegion Test: _glfwGetError
+
+
+#Region Test: _glfwSetErrorCallback
+Test("_glfwSetErrorCallback")
+Func _ErrorCallback($iCode, $sDesc)
+	
+EndFunc
+Local $iError = _glfwSetErrorCallback("_ErrorCallback")
+ConsoleWrite(StringFormat( _
+	"[_glfwSetErrorCallback] Previous Callback: %d", _
+	$iError _
+) & @CRLF)
+TestEnd()
+#EndRegion Test: _glfwSetErrorCallback
 
 TestFinish()
 #EndRegion Tests
